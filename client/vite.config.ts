@@ -9,11 +9,11 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  base: "/",
   server: {
     proxy: {
       "/api": {
         target: "http://localhost:8000",
-        changeOrigin: true,
         secure: false,
       },
     },

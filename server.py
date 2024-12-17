@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Cookie, HTTPException
+from fastapi import FastAPI, Cookie, HTTPException, Request
 from auth.routes import authRouter
 from fastapi.responses import FileResponse
 from config import engine
@@ -7,6 +7,8 @@ from sys_admin.routes import sys_admin_router
 from applications.routes import application_router, protectRoute
 from fastapi.responses import JSONResponse
 from datetime import datetime
+from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from uuid import UUID
 import os
 
@@ -60,11 +62,35 @@ async def get_document(filename: str):
     file_path = os.path.join(MEDIA_DIR, filename)
     if not os.path.exists(file_path):
         raise HTTPException(status_code=404, detail="File not found")
+
     return FileResponse(
         file_path, media_type="application/octet-stream", filename=filename
     )
 
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Adjust as necessary
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(authRouter, prefix="/api/auth")
 app.include_router(sys_admin_router, prefix="/api/sys_admin")
 app.include_router(application_router, prefix="/api/application")
+
+# app.mount("/", StaticFiles(directory="static/dist", html=True), name="static")
+
+app.mount("/assets", StaticFiles(directory="static/dist/assets"), name="assets")
+
+
+@app.get("/{full_path:path}")
+async def catch_all(full_path: str, request: Request):
+    index_path = os.path.join("static/dist", "index.html")
+    print("here")
+    if request.url.path.startswith("/api"):
+        return JSONResponse({"error": "API endpoint not found"}, status_code=404)
+    if os.path.exists(index_path):
+        return FileResponse(index_path)
+    return {"message": "File not found"}

@@ -5,6 +5,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
+
 export const Route = createFileRoute("/_protected")({
   component: RouteComponent,
 });

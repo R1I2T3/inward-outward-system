@@ -28,6 +28,8 @@ application_router = APIRouter()
 
 def protectRoute(access_token: str):
     try:
+        if not access_token:
+            return JSONResponse(content={"message": "application is not verified"})
         decode = jwt.decode(access_token, JWT_SECRET, JWT_ALGORITHM)
         if not decode:
             return JSONResponse(

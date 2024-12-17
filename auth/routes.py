@@ -40,7 +40,7 @@ async def signup(user: SignUpSchema):
         session.add(newUser)
         session.commit()
     token = create_url_safe_token({"email": user.email})
-    link = f"http://localhost:5173/verify/{token}"
+    link = f"http://localhost:8000/verify/{token}"
 
     html = f"""
     <h1>Verify your Email</h1>
@@ -52,7 +52,7 @@ async def signup(user: SignUpSchema):
     return {"message": "User created successfully"}
 
 
-@authRouter.post("/verify/{token}")
+@authRouter.get("/verify/{token}")
 async def verify_user_account(token: str):
     token_data = decode_url_safe_token(token)
     user_email = token_data.get("email")
@@ -88,20 +88,22 @@ async def login(body: LoginSchema, response: Response):
     if not verifyPassword:
         return JSONResponse(content={"message": "Invalid Credentials"}, status_code=401)
     if not results.isEmailVerified:
-        return {"message": "Email not verified"}, 401
+        return JSONResponse({"message": "Email not verified"}, status_code=401)
     access_token = create_access_token(
         data={"sub": str(results.id)},
     )
     response = JSONResponse(
         content={"access_token": access_token, "token_type": "bearer"},
-        status_code=201,
+        status_code=200,
     )
+    print("here")
     response.set_cookie(
         key="access_token",
         value=access_token,
         max_age=3600 * 24 * 10,
         httponly=True,
         secure=False,
+        samesite="lax",
     )
     return response
 
@@ -112,7 +114,7 @@ async def password_reset_request(email_data: ForgotPasswordSchema):
 
     token = create_url_safe_token({"email": email})
 
-    link = f"http://localhost:5173/reset-password/{token}"
+    link = f"http://localhost:8000/reset-password/{token}"
 
     html_message = f"""
     <h1>Reset Your Password</h1>
