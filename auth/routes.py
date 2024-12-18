@@ -106,6 +106,7 @@ async def login(body: LoginSchema, response: Response):
         max_age=3600 * 24 * 10,
         httponly=True,
         secure=False,
+        samesite="lax",
     )
     return response
 

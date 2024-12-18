@@ -15,6 +15,7 @@ import { userAtom } from "@/lib/atoms";
 import { useEffect, useState } from "react";
 import { Button } from "./ui/button";
 import { router } from "@/main";
+import Logo from "@/assets/tcet_logo_2.png";
 const items = [
   {
     title: "My applications",
@@ -79,7 +80,7 @@ export function AppSidebar() {
       <SidebarContent className="bg-[#d17a00] text-white">
         <SidebarGroup>
           <SidebarGroupLabel className="text-white flex flex-col mb-16">
-            <img src="/tcet_logo_2.png" />
+            <img src={Logo} />
           </SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
