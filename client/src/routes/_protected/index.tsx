@@ -118,6 +118,15 @@ function RouteComponent() {
     (acc, curr) => (curr.status === "rejected" ? acc + 1 : acc),
     0
   );
+  const incompleteCount = myTotalApplication?.reduce(
+    (acc, curr) => (curr.status === "incomplete" ? acc + 1 : acc),
+    0
+  );
+
+  const forwardedCount = myTotalApplication?.reduce(
+    (acc, curr) => (curr.status === "forwarded" ? acc + 1 : acc),
+    0
+  );
 
   return (
     <div className="w-[100dvw] lg:w-[80dvw]">
@@ -141,6 +150,18 @@ function RouteComponent() {
             {rejectedCount}
           </CardTitle>
           <CardContent className="text-center text-xl">Rejected</CardContent>
+        </Card>
+        <Card className="flex flex-col justify-center items-center w-[90%] md:w-1/4 text-black">
+          <CardTitle className="text-center text-2xl font-bold">
+            {forwardedCount}
+          </CardTitle>
+          <CardContent className="text-center text-xl">Forward</CardContent>
+        </Card>
+        <Card className="flex flex-col justify-center items-center w-[90%] md:w-1/4 text-black">
+          <CardTitle className="text-center text-2xl font-bold">
+            {incompleteCount}
+          </CardTitle>
+          <CardContent className="text-center text-xl">Incomplete</CardContent>
         </Card>
       </div>
       <div className="w-[90%] md:w-[50%] mx-auto my-6 space-y-4">

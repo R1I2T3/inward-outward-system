@@ -53,17 +53,21 @@ function RouteComponent() {
               <FormProvider {...form}>
                 <SelectFormControl
                   options={turn_in_receivers}
-                  label="For"
+                  label="To"
                   name="for_user"
                   placeholder="Select Receiver"
                 />
                 <Input name="subject" label="Enter the subject" />
                 <TextArea
-                  label="Description of query"
+                  label="Description of Application"
                   name="description"
                   placeholder="Enter the description of your query"
                 />
-                <Input type="file" name="document" label="Document" />
+                <Input
+                  type="file"
+                  name="document"
+                  label="Document.(Max Size 5 MB)"
+                />
                 <Button className="bg-[#d17a00] w-full mt-3" disabled={pending}>
                   {pending ? "Submitting..." : "Submit"}
                 </Button>

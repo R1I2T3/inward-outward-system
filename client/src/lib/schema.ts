@@ -18,8 +18,8 @@ export const createApplicationSchema = zfd.formData({
   subject: z.string().min(1, { message: "Supervisor is required" }),
   document: zfd
     .file()
-    .refine((file) => file.size < 1024 * 1024 * 5, {
-      message: "File must be less than 2 MB",
+    .refine((file) => file.size > 1024 * 1024 * 5, {
+      message: "File must be less than 5 MB",
     })
     .optional(),
 });
